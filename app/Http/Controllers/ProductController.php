@@ -86,7 +86,7 @@ class ProductController extends Controller
             ], 404);
         }
 
-        $product = Product::update([
+        $product->update([
             'nama' => $request->nama,
             'harga' => $request->harga,
             'stok' => $request->stok,
