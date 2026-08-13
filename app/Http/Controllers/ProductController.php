@@ -33,14 +33,26 @@ class ProductController extends Controller
             'harga' => 'required',
             'stok' => 'required',
             'deskripsi' => 'required',
+            'gambar' => 'nullable|image'
         ]);
+
+        $gambar = "";
+        if($request -> hasFile("gambar")){
+            $gambar = time().".".
+            $request->gambar->extension();
+            $request->gambar->storeAs(
+                "products",
+                $gambar,
+                "public"
+            );
+        }
 
         $product = Product::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
             'stok' => $request->stok,
             'deskripsi' => $request->deskripsi,
-            'gambar' => '',
+            'gambar' => $gambar,
         ]);
 
         return response()->json([
@@ -98,6 +110,18 @@ class ProductController extends Controller
             'message' => 'Produk berhasil diperbarui',
             'data' => $product
         ]);
+
+        if($request -> hasFile("gambar")){
+            $gambar = time().".".
+            $request->$gambar->extension();
+            $request->$gambar->storeAs(
+                "products",
+                $gambar,
+                "public"
+            );
+            $product->gambar = $gambar;
+        }
+        $product->save();
     }
 
     /**
